@@ -1,10 +1,10 @@
 package org.example;
 
+import org.example.entity.Apple;
 import org.example.entity.Snake;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -12,8 +12,8 @@ public class GamePanel extends JPanel implements Runnable {
     public int tileSize = 48; //48x48
     private final int maxScreenCol = 16;
     private final int maxScreenRow = 12;
-    private final int screenWidth = maxScreenCol * tileSize; // 768px
-    private final int screenHeight = maxScreenRow * tileSize; // 576px;
+    public final int screenWidth = maxScreenCol * tileSize; // 768px
+    public final int screenHeight = maxScreenRow * tileSize; // 576px;
 
     Thread gameTread;
 
@@ -23,6 +23,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     // snake
     Snake snake = new Snake(keyH, this);
+
+    // apple
+    Apple apple = new Apple(this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -80,6 +83,8 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
 
         snake.render(g2);
+
+        apple.render(g2);
 
         g2.dispose();
     }
