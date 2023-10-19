@@ -6,15 +6,18 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         JFrame window = new JFrame();
 
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
         window.setTitle("Snake Game");
 
-        window.pack();
+        GamePanel gamePanel = new GamePanel();
 
-        window.setResizable(false);
+        window.add(gamePanel);
 
         window.setLocationRelativeTo(null);
+        window.setVisible(true);
 
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.pack();
 
     }
 }
