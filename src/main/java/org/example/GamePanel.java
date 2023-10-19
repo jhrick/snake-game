@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.entity.Snake;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -7,7 +9,7 @@ import java.util.Objects;
 public class GamePanel extends JPanel implements Runnable {
 
     // screen configs
-    protected int tileSize = 48; //48x48
+    public int tileSize = 48; //48x48
     private final int maxScreenCol = 16;
     private final int maxScreenRow = 12;
     private final int screenWidth = maxScreenCol * tileSize; // 768px
@@ -19,10 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     KeyHandler keyH = new KeyHandler();
 
-    // player movement
-    private int x = 100;
-    private int y = 100;
-    private int speed = 2;
+    // snake
+    Snake snake = new Snake(keyH, this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -70,15 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (Objects.equals(keyH.direction, "left")) {
-            x -= speed;
-        } else if (Objects.equals(keyH.direction, "right")) {
-            x += speed;
-        } else if (Objects.equals(keyH.direction, "up")) {
-            y -= speed;
-        } else if (Objects.equals(keyH.direction, "down")) {
-            y += speed;
-        }
+        snake.update();
     }
 
     @Override
@@ -87,9 +79,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g;
 
-        g2.setColor(Color.WHITE);
-
-        g2.fillRect(x, y, tileSize, tileSize);
+        snake.render(g2);
 
         g2.dispose();
     }
