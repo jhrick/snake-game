@@ -79,6 +79,10 @@ public class GamePanel extends JPanel implements Runnable {
         if (count == 30) {
             snake.update();
         }
+
+        if (snake.pickApple(apple)) {
+            apple = new Apple(this);
+        }
     }
 
     @Override

@@ -38,6 +38,13 @@ public class Snake extends Entity{
         }
     }
 
+    public boolean pickApple(Apple apple) {
+        int appleXPosition = apple.getX();
+        int appleYPosition = apple.getY();
+
+        return this.x == appleXPosition && this.y == appleYPosition;
+    }
+
     public void render(Graphics2D g2) {
         g2.setColor(Color.green);
 
