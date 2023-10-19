@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    // screen configs
+    // screen settings
     public int tileSize = 48; //48x48
     private final int maxScreenCol = 16;
     private final int maxScreenRow = 12;
@@ -22,10 +22,10 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler();
 
     // snake
-    Snake snake = new Snake(keyH, this);
+    Snake snake;
 
     // apple
-    Apple apple = new Apple(this);
+    Apple apple;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -33,6 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+
+        snake = new Snake(keyH, this);
+        apple = new Apple(this);
     }
 
     public void startGameTread() {
