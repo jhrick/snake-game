@@ -21,9 +21,9 @@ public class Snake extends Entity{
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
-        speed = 3;
+        x = 96;
+        y = 96;
+        speed = 48;
     }
 
     public void update() {

@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
             lastUpdate = currentTime;
 
             if (delta >= 1) {
-                update();
+                update(count);
                 repaint();
                 count++;
                 delta--;
@@ -75,8 +75,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void update() {
-        snake.update();
+    public void update(int count) {
+        if (count == 30) {
+            snake.update();
+        }
     }
 
     @Override

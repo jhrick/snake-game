@@ -3,6 +3,7 @@ package org.example.entity;
 import org.example.GamePanel;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Apple extends Entity {
 
@@ -11,14 +12,22 @@ public class Apple extends Entity {
     public Apple(GamePanel gp) {
         this.gp = gp;
 
-        this.x = generatePosition(gp.screenWidth);
-        this.y = generatePosition(gp.screenHeight);
+        setRandomPositions();
     }
 
-    private int generatePosition(int max) {
-        double pseudoRandomNum = Math.random();
+    public int getX() {
+        return x;
+    }
 
-        return (int) Math.floor((pseudoRandomNum * max));
+    public int getY() {
+        return y;
+    }
+
+    public void setRandomPositions() {
+        Random random = new Random();
+
+        x = random.nextInt(17) * 48;
+        y = random.nextInt(13) * 48;
     }
 
     public void render(Graphics2D g2) {
