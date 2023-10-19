@@ -2,6 +2,7 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -16,10 +17,19 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60; // 60 frame per seconds;
 
+    KeyHandler keyH = new KeyHandler();
+
+    // player movement
+    private int x = 100;
+    private int y = 100;
+    private int speed = 2;
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
+        this.addKeyListener(keyH);
+        this.setFocusable(true);
     }
 
     public void startGameTread() {
@@ -60,11 +70,27 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-
+        if (Objects.equals(keyH.direction, "left")) {
+            x -= speed;
+        } else if (Objects.equals(keyH.direction, "right")) {
+            x += speed;
+        } else if (Objects.equals(keyH.direction, "up")) {
+            y -= speed;
+        } else if (Objects.equals(keyH.direction, "down")) {
+            y += speed;
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+
+        g2.setColor(Color.WHITE);
+
+        g2.fillRect(x, y, tileSize, tileSize);
+
+        g2.dispose();
     }
 }
