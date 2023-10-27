@@ -5,8 +5,10 @@ import org.example.entity.Snake;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements ActionListener {
 
     // screen settings
     public int tileSize = 48; //48x48
@@ -15,9 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = maxScreenCol * tileSize; // 768px
     public final int screenHeight = maxScreenRow * tileSize; // 576px;
 
-    Thread gameTread;
-
-    int FPS = 60; // 60 frame per seconds;
+    final int delay = 100;
+    Timer timer;
 
     KeyHandler keyH = new KeyHandler();
 
@@ -38,47 +39,13 @@ public class GamePanel extends JPanel implements Runnable {
         apple = new Apple(this);
     }
 
-    public void startGameTread() {
-        gameTread = new Thread(this);
-        gameTread.start();
+    public void startGame() {
+        timer = new Timer(delay, this);
+        timer.start();
     }
 
-    @Override
-    public void run() {
-        double drawInterval = (double) 1000000000 /FPS; // 1 nano second divide per 60FPS
-        double delta = 0;
-        long lastUpdate = System.nanoTime();
-        long currentTime;
-        long timer = 0;
-        int count = 0;
-
-        while (gameTread != null) {
-            currentTime = System.nanoTime();
-
-            delta += (currentTime - lastUpdate) / drawInterval;
-            timer += (currentTime - lastUpdate);
-
-            lastUpdate = currentTime;
-
-            if (delta >= 1) {
-                update(count);
-                repaint();
-                count++;
-                delta--;
-            }
-
-            if (timer >= 1000000000) {
-                System.out.println("FPS: " + count);
-                timer = 0;
-                count = 0;
-            }
-        }
-    }
-
-    public void update(int count) {
-        if (count == 30) {
-            snake.update();
-        }
+    public void update() {
+        snake.update();
 
         if (snake.pickApple(apple)) {
             apple = new Apple(this);
@@ -96,5 +63,13 @@ public class GamePanel extends JPanel implements Runnable {
         apple.render(g2);
 
         g2.dispose();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (snake.isRunning()) {
+            update();
+        }
+        repaint();
     }
 }

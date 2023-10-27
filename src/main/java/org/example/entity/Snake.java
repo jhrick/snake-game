@@ -6,12 +6,12 @@ import org.example.KeyHandler;
 import java.awt.*;
 import java.util.Objects;
 
-public class Snake extends Entity{
-
-    private int speed;
+public class Snake extends Entity {
 
     KeyHandler keyH;
     GamePanel gp;
+
+    boolean running;
 
     public Snake(KeyHandler keyH, GamePanel gp) {
         this.keyH = keyH;
@@ -23,18 +23,22 @@ public class Snake extends Entity{
     public void setDefaultValues() {
         x = 96;
         y = 96;
-        speed = 48;
+        running = true;
     }
 
     public void update() {
+        move();
+    }
+
+    private void move() {
         if (Objects.equals(keyH.direction, "left")) {
-            x -= speed;
+            x -= gp.tileSize;
         } else if (Objects.equals(keyH.direction, "right")) {
-            x += speed;
+            x += gp.tileSize;
         } else if (Objects.equals(keyH.direction, "up")) {
-            y -= speed;
+            y -= gp.tileSize;
         } else if (Objects.equals(keyH.direction, "down")) {
-            y += speed;
+            y += gp.tileSize;
         }
     }
 
@@ -49,5 +53,9 @@ public class Snake extends Entity{
         g2.setColor(Color.green);
 
         g2.fillRect(x, y, gp.tileSize, gp.tileSize);
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
