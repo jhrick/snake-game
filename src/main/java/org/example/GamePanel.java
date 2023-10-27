@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public final int screenWidth = maxScreenCol * tileSize; // 768px
     public final int screenHeight = maxScreenRow * tileSize; // 576px;
 
-    final int delay = 100;
+    final int delay = 150;
     Timer timer;
 
     KeyHandler keyH = new KeyHandler();
@@ -47,9 +47,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void update() {
         snake.update();
 
-        if (snake.pickApple(apple)) {
-            apple = new Apple(this);
-        }
+        apple = snake.checkApple(apple);
     }
 
     @Override
