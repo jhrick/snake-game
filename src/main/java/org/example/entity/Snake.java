@@ -90,11 +90,19 @@ public class Snake extends Entity {
     }
 
     public void render(Graphics2D g2) {
-        g2.setColor(Color.green);
+        for (int i = (pieces.size() - 1); i > 0; i--) {
+            int currentPieceX = pieces.get(i).getX();
+            int currentPieceY = pieces.get(i).getY();
 
-        for (Piece piece : pieces) {
-            g2.fillRect(piece.getX(), piece.getY(), gp.tileSize, gp.tileSize);
+            g2.setColor(new Color(0, 153, 0));
+            g2.fillRect(currentPieceX, currentPieceY, gp.tileSize, gp.tileSize);
         }
+
+        snakeHeadX = pieces.getFirst().getX();
+        snakeHeadY = pieces.getFirst().getY();
+
+        g2.setColor(new Color(0, 204, 0));
+        g2.fillRect(snakeHeadX, snakeHeadY, gp.tileSize, gp.tileSize);
     }
 
     public boolean isRunning() {
