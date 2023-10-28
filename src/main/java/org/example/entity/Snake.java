@@ -15,6 +15,9 @@ public class Snake extends Entity {
 
     LinkedList<Piece> pieces = new LinkedList<>();
 
+    int snakeHeadX;
+    int snakeHeadY;
+
     public Snake(KeyHandler keyH, GamePanel gp) {
         this.keyH = keyH;
         this.gp = gp;
@@ -23,6 +26,9 @@ public class Snake extends Entity {
 
         pieces.addFirst(new Piece(this.x, this.y));
         pieces.add(new Piece((pieces.get(0).getX() - gp.tileSize), (pieces.get(0).getY() - gp.tileSize)));
+
+        snakeHeadX = pieces.getFirst().getX();
+        snakeHeadY = pieces.getFirst().getY();
     }
 
     public void setDefaultValues() {
@@ -33,6 +39,7 @@ public class Snake extends Entity {
 
     public void update() {
         move();
+        checkCollision();
     }
 
     private void move() {
@@ -76,8 +83,6 @@ public class Snake extends Entity {
 
             pieces.addLast(new Piece(pieces.get(pieces.size() - 1).getX(), pieces.get(pieces.size() - 1).getY()));
 
-            System.out.printf("new apple!!x: %d; y %d", apple.getX(), apple.getY());
-
             return apple;
         }
 
@@ -94,5 +99,30 @@ public class Snake extends Entity {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public void checkCollision() {
+        snakeHeadX = pieces.getFirst().getX();
+        snakeHeadY = pieces.getFirst().getY();
+
+        for (int i = (pieces.size() - 1); i > 0; i--) {
+            int currentPieceX = pieces.get(i).getX();
+            int currentPieceY = pieces.get(i).getY();
+
+
+            if (snakeHeadX == (currentPieceX) && snakeHeadY == (currentPieceY)) {
+                running = false;
+                System.out.println("stop running");
+                System.out.println("X: " + (snakeHeadX == currentPieceX));
+                System.out.println("Y: " + (snakeHeadY == currentPieceY));
+                break;
+            }
+        }
+
+        if ((snakeHeadX) == gp.screenWidth || (snakeHeadX)< 0) {
+            running = false;
+        } else if ((snakeHeadY) == gp.screenHeight || (snakeHeadY) < 0) {
+            running = false;
+        }
     }
 }
