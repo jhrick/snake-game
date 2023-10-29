@@ -56,9 +56,25 @@ public class GamePanel extends JPanel implements ActionListener {
 
         Graphics2D g2 = (Graphics2D)g;
 
-        snake.render(g2);
+        if (snake.isRunning()) {
+            snake.render(g2);
 
-        apple.render(g2);
+            apple.render(g2);
+        } else {
+            String text = "Game Over";
+
+            g2.setColor(Color.red);
+
+            Font font = new Font("sans serif", Font.BOLD, 48);
+
+            FontMetrics metrics = g2.getFontMetrics(font);
+
+            int x = (screenWidth - metrics.stringWidth(text)) / 2;
+            int y = ((screenHeight - metrics.getHeight()) / 2) + metrics.getAscent();
+
+            g2.setFont(font);
+            g2.drawString("GAME OVER", x, y);
+        }
 
         g2.dispose();
     }
