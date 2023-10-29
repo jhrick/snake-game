@@ -5,8 +5,10 @@ import org.example.entity.Snake;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements ActionListener {
 
     // screen settings
     public int tileSize = 48; //48x48
@@ -15,11 +17,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = maxScreenCol * tileSize; // 768px
     public final int screenHeight = maxScreenRow * tileSize; // 576px;
 
-    Thread gameTread;
+    final int delay = 150;
+    Timer timer;
 
-    int FPS = 60; // 60 frame per seconds;
-
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH;
 
     // snake
     Snake snake;
@@ -30,59 +31,29 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        
         this.setDoubleBuffered(true);
+
+        keyH = new KeyHandler(this);
+
         this.addKeyListener(keyH);
+
         this.setFocusable(true);
+    }
+
+    public void startGame() {
+        timer = new Timer(delay, this);
 
         snake = new Snake(keyH, this);
         apple = new Apple(this);
+
+        timer.start();
     }
 
-    public void startGameTread() {
-        gameTread = new Thread(this);
-        gameTread.start();
-    }
+    public void update() {
+        snake.update();
 
-    @Override
-    public void run() {
-        double drawInterval = (double) 1000000000 /FPS; // 1 nano second divide per 60FPS
-        double delta = 0;
-        long lastUpdate = System.nanoTime();
-        long currentTime;
-        long timer = 0;
-        int count = 0;
-
-        while (gameTread != null) {
-            currentTime = System.nanoTime();
-
-            delta += (currentTime - lastUpdate) / drawInterval;
-            timer += (currentTime - lastUpdate);
-
-            lastUpdate = currentTime;
-
-            if (delta >= 1) {
-                update(count);
-                repaint();
-                count++;
-                delta--;
-            }
-
-            if (timer >= 1000000000) {
-                System.out.println("FPS: " + count);
-                timer = 0;
-                count = 0;
-            }
-        }
-    }
-
-    public void update(int count) {
-        if (count == 30) {
-            snake.update();
-        }
-
-        if (snake.pickApple(apple)) {
-            apple = new Apple(this);
-        }
+        apple = snake.checkApple(apple);
     }
 
     @Override
@@ -91,10 +62,46 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g;
 
-        snake.render(g2);
+        if (snake.isRunning()) {
+            snake.render(g2);
 
-        apple.render(g2);
+            apple.render(g2);
+        } else {
+            String text = "GAME OVER";
+
+            Font font = new Font("sans serif", Font.BOLD, 48);
+
+            FontMetrics metrics = g2.getFontMetrics(font);
+
+            int x = (screenWidth - metrics.stringWidth(text)) / 2;
+            int y = ((screenHeight - metrics.getHeight()) / 2) + metrics.getAscent();
+
+            g2.setColor(Color.red);
+            g2.setFont(font);
+            g2.drawString(text, x, y);
+
+            text = "press enter for play again";
+
+            font = new Font("sans serif", Font.PLAIN, 12);
+
+            metrics = g2.getFontMetrics(font);
+
+            x = (screenWidth - metrics.stringWidth(text)) / 2;
+            y = ((screenHeight - metrics.getHeight()) / 2) + metrics.getAscent();
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(font);
+            g2.drawString(text, x, (y + tileSize));
+        }
 
         g2.dispose();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (snake.isRunning()) {
+            update();
+        }
+        repaint();
     }
 }

@@ -26,8 +26,8 @@ public class Apple extends Entity {
     public void setRandomPositions() {
         Random random = new Random();
 
-        x = random.nextInt(17) * 48;
-        y = random.nextInt(13) * 48;
+        x = random.nextInt(16) * 48;
+        y = random.nextInt(12) * 48;
     }
 
     public void render(Graphics2D g2) {
