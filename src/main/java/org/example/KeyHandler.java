@@ -5,8 +5,14 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public String direction;
+    private final GamePanel gp;
 
-    public KeyHandler() {
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
+        setDefaultValues();
+    }
+
+    public void setDefaultValues() {
         direction = "right";
     }
 
@@ -27,6 +33,12 @@ public class KeyHandler implements KeyListener {
             direction = "up";
         } else if (keyCode == KeyEvent.VK_DOWN && direction != "up") {
             direction = "down";
+        } else if (keyCode == KeyEvent.VK_ENTER && !gp.snake.isRunning()) {
+            setDefaultValues();
+
+            gp.timer.stop();
+
+            gp.startGame();
         }
     }
 

@@ -120,9 +120,6 @@ public class Snake extends Entity {
 
             if (snakeHeadX == (currentPieceX) && snakeHeadY == (currentPieceY)) {
                 running = false;
-                System.out.println("stop running");
-                System.out.println("X: " + (snakeHeadX == currentPieceX));
-                System.out.println("Y: " + (snakeHeadY == currentPieceY));
                 break;
             }
         }

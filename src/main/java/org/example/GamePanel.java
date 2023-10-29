@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements ActionListener {
     final int delay = 150;
     Timer timer;
 
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH;
 
     // snake
     Snake snake;
@@ -31,16 +31,22 @@ public class GamePanel extends JPanel implements ActionListener {
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
+        
         this.setDoubleBuffered(true);
-        this.addKeyListener(keyH);
-        this.setFocusable(true);
 
-        snake = new Snake(keyH, this);
-        apple = new Apple(this);
+        keyH = new KeyHandler(this);
+
+        this.addKeyListener(keyH);
+
+        this.setFocusable(true);
     }
 
     public void startGame() {
         timer = new Timer(delay, this);
+
+        snake = new Snake(keyH, this);
+        apple = new Apple(this);
+
         timer.start();
     }
 
@@ -61,9 +67,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
             apple.render(g2);
         } else {
-            String text = "Game Over";
-
-            g2.setColor(Color.red);
+            String text = "GAME OVER";
 
             Font font = new Font("sans serif", Font.BOLD, 48);
 
@@ -72,8 +76,22 @@ public class GamePanel extends JPanel implements ActionListener {
             int x = (screenWidth - metrics.stringWidth(text)) / 2;
             int y = ((screenHeight - metrics.getHeight()) / 2) + metrics.getAscent();
 
+            g2.setColor(Color.red);
             g2.setFont(font);
-            g2.drawString("GAME OVER", x, y);
+            g2.drawString(text, x, y);
+
+            text = "press enter for play again";
+
+            font = new Font("sans serif", Font.PLAIN, 12);
+
+            metrics = g2.getFontMetrics(font);
+
+            x = (screenWidth - metrics.stringWidth(text)) / 2;
+            y = ((screenHeight - metrics.getHeight()) / 2) + metrics.getAscent();
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(font);
+            g2.drawString(text, x, (y + tileSize));
         }
 
         g2.dispose();
